@@ -1,0 +1,41 @@
+Project Planning: StyledTodo
+ Goal:
+        Build a responsive Todo App using React + TypeScript + Styled Components with localStorage support.
+
+Functional Requirements:
+            -Add new todo
+            -Edit existing todo
+            -Delete todo
+            -Mark as complete/incomplete
+            -Toggle between viewing active and completed tasks
+            -Persist todos using localStorage
+            -Responsive styling using styled-components
+
+Styling Requirements:
+            -Use props in styled components
+            -Use `createGlobalStyle` for base resets and font styles
+            -Use media queries for responsive layout
+
+Components:
+            TodoInput:
+                Input field + Add button
+            TodoItem: 
+                Individual todo with edit, delete, toggle
+            App: 
+                Main stateful component managing todos
+
+Type Definitions:
+             Create `Todo` type with `text` and `completed` fields
+
+Data Persistence:
+            On load: 
+                Read from localStorage
+            On update: 
+                Write to localStorage
+
+File Organization:
+            /src/components – UI components
+            /src/styles – Global and shared styles
+            /src/types – Reusable types/interfaces
+            App.tsx – Main app logic
+            index.tsx – App entry point
