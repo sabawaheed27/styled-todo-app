@@ -9,23 +9,20 @@ Functional Requirements:
             -Mark as complete/incomplete
             -Toggle between viewing active and completed tasks
             -Persist todos using localStorage
-            -Responsive styling using styled-components
 
 Styling Requirements:
             -Use props in styled components
-            -Use `createGlobalStyle` for base resets and font styles
-            -Use media queries for responsive layout
+            -Use `Globals.css` for html and body
+            
 
 Components:
-            TodoInput:
-                Input field + Add button
+            Input:
             TodoItem: 
-                Individual todo with edit, delete, toggle
-            App: 
-                Main stateful component managing todos
-
-Type Definitions:
-             Create `Todo` type with `text` and `completed` fields
+            TodoList:
+            Header:
+            Footer:
+            Button:
+            
 
 Data Persistence:
             On load: 
@@ -36,6 +33,4 @@ Data Persistence:
 File Organization:
             /src/components – UI components
             /src/styles – Global and shared styles
-            /src/types – Reusable types/interfaces
-            App.tsx – Main app logic
-            index.tsx – App entry point
+           
