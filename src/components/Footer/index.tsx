@@ -17,4 +17,3 @@ const StyledFooter = styled.footer`
 export default function Footer() {
   return <StyledFooter>© 2025 Styled Todo App</StyledFooter>;
 }
-
