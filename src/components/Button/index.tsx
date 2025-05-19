@@ -1,17 +1,25 @@
 'use client';
 
 import styled from 'styled-components';
-//This component expects to receive a children prop, and it can be anything React can render.
+
 type ButtonProps = {
   children: React.ReactNode;
   onClick?: () => void;
-  bg?: string;
+  variant?: string;
   type?: 'button' | 'submit';
 };
 
-const StyledButton = styled.button<{ bg?: string }>`
+const StyledButton = styled.button.attrs(({ type = 'button' }) => ({
+  type,
+})) <{ variant?: string }>`
+  background: ${({ variant }) =>
+    variant === 'primary' ? '#2196f3' :
+    variant === 'danger' ? '#f44336' :
+    variant === 'success' ? '#4caf50' :
+    variant === 'warning' ? '#ff9800' :
+    '#ccc'};
+
   padding: 0.5rem 1rem;
-  background-color: #e91e63;
   color: white;
   border: none;
   cursor: pointer;
@@ -21,10 +29,9 @@ const StyledButton = styled.button<{ bg?: string }>`
     opacity: 0.9;
   }
 `;
-
-export default function Button({ children, ...props}: ButtonProps) {
+export default function Button({ children, onClick, variant, type = "button" }: ButtonProps) {
   return (
-    <StyledButton {...props}>
+    <StyledButton onClick={onClick} variant={variant} type={type}>
       {children}
     </StyledButton>
   );
