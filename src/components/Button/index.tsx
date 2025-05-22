@@ -3,36 +3,33 @@
 import styled from 'styled-components';
 
 type ButtonProps = {
-  children: React.ReactNode;
-  onClick?: () => void;
-  variant?: string;
-  type?: 'button' | 'submit';
+  $variant?: 'primary' | 'success' | 'danger' | 'warning';
 };
 
-const StyledButton = styled.button.attrs(({ type = 'button' }) => ({
-  type,
-})) <{ variant?: string }>`
-  background: ${({ variant }) =>
-    variant === 'primary' ? '#2196f3' :
-    variant === 'danger' ? '#f44336' :
-    variant === 'success' ? '#4caf50' :
-    variant === 'warning' ? '#ff9800' :
-    '#ccc'};
-
-  padding: 0.5rem 1rem;
+const StyledButton = styled.button<ButtonProps>`
+  background-color: ${({ $variant }) => {
+    switch ($variant) {
+      case 'success':
+        return '#4caf50';
+      case 'danger':
+        return '#f44336';
+      case 'warning':
+        return '#ff9800';
+      default:
+        return '#2196f3'; // primary
+    }
+  }};
   color: white;
+  padding: 0.5rem 1rem;
   border: none;
-  cursor: pointer;
   border-radius: 4px;
-
-  &:hover {
-    opacity: 0.9;
-  }
+  cursor: pointer;
+  font-size: 1rem;
 `;
-export default function Button({ children, onClick, variant, type = "button" }: ButtonProps) {
-  return (
-    <StyledButton onClick={onClick} variant={variant} type={type}>
-      {children}
-    </StyledButton>
-  );
+
+export default function Button({
+  children,
+  ...rest
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & { $variant?: ButtonProps['$variant'] }) {
+  return <StyledButton {...rest}>{children}</StyledButton>;
 }

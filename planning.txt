@@ -33,4 +33,19 @@ Data Persistence:
 File Organization:
             /src/components – UI components
             /src/styles – Global and shared styles
+
+
+
+            Code:
+                    const deleteTodo = (index: number) => {
+                     const filtered = todos.filter((_, i) => i !== index);
+                        setTodos(filtered);
+                     };
+
+                    todos is assumed to be an array of todo items (likely a useState variable).
+                    .filter() creates a new array by keeping only the items that meet a condition.
+                    ( _, i ) is the callback function's parameters:
+                    the arrow function i !== index means:
+                    Keep all items except the one whose index matches the one passed to deleteTodo."
+                        So, this line removes the todo item at the specified index.
            

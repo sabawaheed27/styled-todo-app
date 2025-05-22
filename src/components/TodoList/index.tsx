@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -7,6 +8,7 @@ import Input from '../Input';
 import TodoItem from '../TodoItem';
 
 type Todo = {
+  id: string;
   text: string;
   completed: boolean;
 };
@@ -34,51 +36,55 @@ const TodoListWrapper = styled.ul`
 `;
 
 export default function TodoList() {
-  const [todos, setTodos] = useState<Todo[]>([]); //Stores the list of all todo items.
-  const [editIndex, setEditIndex] = useState<number | null>(null);// is being edited and what its current value is.
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [editId, setEditId] = useState<string | null>(null);
   const [editText, setEditText] = useState('');
-  const [newTodoText, setNewTodoText] = useState('');//what the user types in the input field
-  const [showCompleted, setShowCompleted] = useState(false);//you show completed or active todos.
+  const [newTodoText, setNewTodoText] = useState('');
+  const [showCompleted, setShowCompleted] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('todos');
     if (saved) setTodos(JSON.parse(saved));
-  }, []);//Loads saved todos when the app first loads.
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);//Saves todos every time the list changes.
+  }, [todos]);
 
   const addTodo = () => {
     if (newTodoText.trim()) {
-      setTodos([...todos, { text: newTodoText.trim(), completed: false }]);
+      setTodos([
+        ...todos,
+        { id: crypto.randomUUID(), text: newTodoText.trim(), completed: false },
+      ]);
       setNewTodoText('');
     }
   };
 
-  const saveTodo = (index: number) => {
-    const newTodos = [...todos];
-    newTodos[index].text = editText;
-    setTodos(newTodos);
-    setEditIndex(null);
-  };//Saves the edited text into the todo list.
+  const saveTodo = (id: string) => {
+    const updated = todos.map(todo =>
+      todo.id === id ? { ...todo, text: editText } : todo
+    );
+    setTodos(updated);
+    setEditId(null);
+  };
 
-  const deleteTodo = (index: number) => {
-    const filtered = todos.filter((_, i) => i !== index);
+  const deleteTodo = (id: string) => {
+    const filtered = todos.filter(todo => todo.id !== id);
     setTodos(filtered);
   };
 
-  const toggleComplete = (index: number) => {
-    const updated = todos.map((todo, i) =>
-      i === index ? { ...todo, completed: !todo.completed } : todo
+  const toggleComplete = (id: string) => {
+    const updated = todos.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
     );
     setTodos(updated);
   };
 
   const filteredTodos = showCompleted
-    ? todos.filter((t) => t.completed)
-    : todos.filter((t) => !t.completed);
-  //
+    ? todos.filter(t => t.completed)
+    : todos.filter(t => !t.completed);
+
   return (
     <Container>
       <NewItem>
@@ -93,33 +99,26 @@ export default function TodoList() {
       </NewItem>
 
       <TodoListWrapper>
-        {todos.map((todo, index) => {
-          if (showCompleted && !todo.completed) return null;
-          if (!showCompleted && todo.completed) return null;
-
-          return (
-            <TodoItem
-              key={index}
-              todo={todo}
-              index={index}
-              editIndex={editIndex}
-              editText={editText}
-              onEditChange={setEditText}
-              onSave={saveTodo}
-              onDelete={deleteTodo}
-              onToggle={toggleComplete}
-              onEditStart={(i, text) => {
-                setEditIndex(i);
-                setEditText(text);
-              }}
-            />
-          );
-        })}
-
+        {filteredTodos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            isEditing={editId === todo.id}
+            editText={editText}
+            onEditChange={setEditText}
+            onSave={() => saveTodo(todo.id)}
+            onDelete={() => deleteTodo(todo.id)}
+            onToggle={() => toggleComplete(todo.id)}
+            onEditStart={() => {
+              setEditId(todo.id);
+              setEditText(todo.text);
+            }}
+          />
+        ))}
       </TodoListWrapper>
 
       <Button
-        variant="primary"
+        $variant="primary"
         onClick={() => setShowCompleted(!showCompleted)}
       >
         {showCompleted ? 'Show Active' : 'Show Completed'}

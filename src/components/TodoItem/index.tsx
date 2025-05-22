@@ -5,20 +5,20 @@ import Button from '../Button';
 import Input from '../Input';
 
 type Todo = {
+  id: string;
   text: string;
   completed: boolean;
 };
 
-type Props = {
+type TodoItemProps = {
   todo: Todo;
-  index: number;
-  editIndex: number | null;
+  isEditing: boolean;
   editText: string;
-  onEditChange: (value: string) => void;
-  onSave: (index: number) => void;
-  onDelete: (index: number) => void;
-  onToggle: (index: number) => void;
-  onEditStart: (index: number, text: string) => void;
+  onEditChange: (text: string) => void;
+  onSave: () => void;
+  onDelete: () => void;
+  onToggle: () => void;
+  onEditStart: () => void;
 };
 
 const TodoItemWrapper = styled.li`
@@ -37,7 +37,6 @@ const TodoText = styled.span<{ $completed: boolean }>`
   text-decoration: ${({ $completed }) => ($completed ? 'line-through' : 'none')};
 `;
 
-
 const ButtonGroup = styled.div`
   display: flex;
   gap: 0.5rem;
@@ -45,31 +44,39 @@ const ButtonGroup = styled.div`
   flex-wrap: wrap;
 `;
 
-export default function TodoItem({ todo, index, editIndex, editText, onEditChange, onSave, onDelete, onToggle, onEditStart,
-}: Props) {
+export default function TodoItem({
+  todo,
+  isEditing,
+  editText,
+  onEditChange,
+  onSave,
+  onDelete,
+  onToggle,
+  onEditStart,
+}: TodoItemProps) {
   return (
     <TodoItemWrapper>
-      {editIndex === index ? (
+      {isEditing ? (
         <>
           <Input
             type="text"
             value={editText}
             onChange={(e) => onEditChange(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && onSave(index)}
+            onKeyDown={(e) => e.key === 'Enter' && onSave()}
           />
           <ButtonGroup>
-            <Button variant="success" onClick={() => onSave(index)}>Save</Button>
-            <Button variant="danger" onClick={() => onDelete(index)}>Delete</Button>
+            <Button $variant="success" onClick={onSave}>Save</Button>
+            <Button $variant="danger" onClick={onDelete}>Delete</Button>
           </ButtonGroup>
         </>
       ) : (
         <>
           <TodoText $completed={todo.completed}>{todo.text}</TodoText>
           <ButtonGroup>
-            <Button variant="primary" onClick={() => onToggle(index)}>
+            <Button $variant="primary" onClick={onToggle}>
               {todo.completed ? 'Undo' : 'Complete'}
             </Button>
-            <Button variant="warning" onClick={() => onEditStart(index, todo.text)}>
+            <Button $variant="warning" onClick={onEditStart}>
               Edit
             </Button>
           </ButtonGroup>
@@ -78,4 +85,3 @@ export default function TodoItem({ todo, index, editIndex, editText, onEditChang
     </TodoItemWrapper>
   );
 }
-
