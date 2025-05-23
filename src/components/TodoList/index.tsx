@@ -43,7 +43,7 @@ export default function TodoList() {
   const [showCompleted, setShowCompleted] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('todos');
+    const saved :string | null= localStorage.getItem('todos');
     if (saved) setTodos(JSON.parse(saved));
   }, []);
 
