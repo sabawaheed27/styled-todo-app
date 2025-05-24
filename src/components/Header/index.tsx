@@ -12,7 +12,7 @@ text-align: center;
 const StyledPageTitle = styled.h1`
 margin: 24px;
 font-size: 1.8rem;
-font-color: #eef1ef;
+color: #eef1ef;
 text-align: center;
 
 `;

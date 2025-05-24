@@ -14,3 +14,8 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+header, footer, h1 {
+  all: unset;
+  color: black;
+}
